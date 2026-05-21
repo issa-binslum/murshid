@@ -19,6 +19,8 @@ import '../features/roles/roles_screen.dart';
 import '../features/sales/sales_screen.dart';
 import '../features/suppliers/suppliers_screen.dart';
 import '../features/users/users_screen.dart';
+import '../features/profile/profile_screen.dart';
+import '../features/settings/settings_screen.dart';
 import '../layouts/adaptive_shell.dart';
 import 'route_names.dart';
 
@@ -226,6 +228,20 @@ final routerProvider = Provider<GoRouter>((ref) {
               path: RoutePaths.noAccess,
               name: RouteNames.noAccess,
               builder: (_, __) => const NoAccessScreen(),
+            ),
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(
+              path: RoutePaths.profile,
+              name: RouteNames.profile,
+              builder: (_, __) => const ProfileScreen(),
+            ),
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(
+              path: RoutePaths.settings,
+              name: RouteNames.settings,
+              builder: (_, __) => const SettingsScreen(),
             ),
           ]),
         ],

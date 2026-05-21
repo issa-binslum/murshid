@@ -120,7 +120,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           const SizedBox(height: 24),
 
           _StatGrid(
-            width: width,
             totalRevenue: totalRevenue,
             unpaidAmount: unpaidAmount,
             unpaidCount: unpaid.length,
@@ -260,7 +259,6 @@ class _Header extends StatelessWidget {
 // ─────────────────────────────────────────────────────────────────────────────
 
 class _StatGrid extends StatelessWidget {
-  final double width;
   final double totalRevenue;
   final double unpaidAmount;
   final int unpaidCount;
@@ -268,7 +266,6 @@ class _StatGrid extends StatelessWidget {
   final int inventoryCount;
 
   const _StatGrid({
-    required this.width,
     required this.totalRevenue,
     required this.unpaidAmount,
     required this.unpaidCount,
@@ -319,36 +316,43 @@ class _StatGrid extends StatelessWidget {
       ),
     ];
 
-    if (width >= 900) {
-      return Row(
-        children: cards
-            .expand((c) => [Expanded(child: c), const SizedBox(width: 16)])
-            .toList()
-          ..removeLast(),
-      );
-    }
-    if (width >= 600) {
-      return Column(
-        children: [
-          Row(children: [
-            Expanded(child: cards[0]),
-            const SizedBox(width: 16),
-            Expanded(child: cards[1]),
-          ]),
-          const SizedBox(height: 16),
-          Row(children: [
-            Expanded(child: cards[2]),
-            const SizedBox(width: 16),
-            Expanded(child: cards[3]),
-          ]),
-        ],
-      );
-    }
-    return Column(
-      children: cards
-          .expand((c) => [c, const SizedBox(height: 12)])
-          .toList()
-        ..removeLast(),
+    // LayoutBuilder gives the actual available width (content area, not full screen).
+    // This is correct in DesktopShell where the sidebar takes some of the screen.
+    return LayoutBuilder(
+      builder: (_, constraints) {
+        final w = constraints.maxWidth;
+        if (w >= 640) {
+          return Row(
+            children: cards
+                .expand((c) => [Expanded(child: c), const SizedBox(width: 16)])
+                .toList()
+              ..removeLast(),
+          );
+        }
+        if (w >= 320) {
+          return Column(
+            children: [
+              Row(children: [
+                Expanded(child: cards[0]),
+                const SizedBox(width: 16),
+                Expanded(child: cards[1]),
+              ]),
+              const SizedBox(height: 16),
+              Row(children: [
+                Expanded(child: cards[2]),
+                const SizedBox(width: 16),
+                Expanded(child: cards[3]),
+              ]),
+            ],
+          );
+        }
+        return Column(
+          children: cards
+              .expand((c) => [c, const SizedBox(height: 12)])
+              .toList()
+            ..removeLast(),
+        );
+      },
     );
   }
 }
@@ -389,13 +393,19 @@ class _StatTile extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.baseline,
       textBaseline: TextBaseline.alphabetic,
       children: [
-        Text(value,
-            style: TextStyle(
-                fontSize: 24, fontWeight: FontWeight.w800, color: color, height: 1)),
+        Flexible(
+          child: Text(value,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                  fontSize: 24, fontWeight: FontWeight.w800, color: color, height: 1)),
+        ),
         const SizedBox(width: 5),
-        Text(suffix,
-            style: const TextStyle(
-                fontSize: 11, color: AppColors.textSecondary, fontWeight: FontWeight.w500)),
+        Flexible(
+          child: Text(suffix,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                  fontSize: 11, color: AppColors.textSecondary, fontWeight: FontWeight.w500)),
+        ),
       ],
     );
 

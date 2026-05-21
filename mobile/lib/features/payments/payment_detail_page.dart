@@ -118,7 +118,6 @@ class _PageHeader extends StatelessWidget {
           label: 'PDF',
           icon: Icons.picture_as_pdf_outlined,
           onTap: onPdf),
-      _CopyIdBtn(paymentId: paymentId),
       if (canManage)
         _ActionBtn(
           label: 'Delete',
@@ -321,62 +320,6 @@ class _ActionBtn extends StatelessWidget {
               fontSize: 13,
               color: Colors.white,
               fontWeight: FontWeight.w600)),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: bgColor,
-        foregroundColor: Colors.white,
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        minimumSize: const Size(0, 36),
-        elevation: 0,
-      ),
-    );
-  }
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Copy ID button
-// ─────────────────────────────────────────────────────────────────────────────
-
-class _CopyIdBtn extends StatefulWidget {
-  final String paymentId;
-  const _CopyIdBtn({required this.paymentId});
-
-  @override
-  State<_CopyIdBtn> createState() => _CopyIdBtnState();
-}
-
-class _CopyIdBtnState extends State<_CopyIdBtn> {
-  bool _copied = false;
-
-  Future<void> _copy() async {
-    final shortId = widget.paymentId.substring(0, 8).toUpperCase();
-    await Clipboard.setData(ClipboardData(text: '#$shortId'));
-    setState(() => _copied = true);
-    await Future.delayed(const Duration(seconds: 2));
-    if (mounted) setState(() => _copied = false);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final bgColor =
-        _copied ? AppColors.iconPayments : AppColors.textSecondary;
-    return ElevatedButton.icon(
-      onPressed: _copy,
-      icon: Icon(
-        _copied ? Icons.check_rounded : Icons.copy_outlined,
-        size: 15,
-        color: Colors.white,
-      ),
-      label: Text(
-        _copied ? 'Copied!' : 'Copy ID',
-        style: const TextStyle(
-          fontSize: 13,
-          color: Colors.white,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
       style: ElevatedButton.styleFrom(
         backgroundColor: bgColor,
         foregroundColor: Colors.white,

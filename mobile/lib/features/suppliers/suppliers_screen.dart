@@ -66,10 +66,13 @@ class _SuppliersScreenState extends ConsumerState<SuppliersScreen> {
     final state = ref.watch(supplierProvider);
     final canManage =
         ref.watch(authProvider).hasPermission('suppliers:manage');
-    final isWide = MediaQuery.sizeOf(context).width >= 720;
+    final size = MediaQuery.sizeOf(context);
+    final isWide = size.width >= 720;
+    final isCompact = size.height < 500;
     final filtered = _filtered(state.items);
 
     return Scaffold(
+      resizeToAvoidBottomInset: !isCompact,
       backgroundColor: AppColors.pageBackground,
       body: Padding(
         padding: EdgeInsets.all(isWide ? 32 : 16),
@@ -189,7 +192,9 @@ class _PageHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isWide = MediaQuery.sizeOf(context).width >= 720;
+    final size = MediaQuery.sizeOf(context);
+    final isWide = size.width >= 720;
+    final isCompact = size.height < 500;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -224,13 +229,13 @@ class _PageHeader extends StatelessWidget {
                 ),
               ),
             ),
-            if (isWide && canManage) ...[
+            if ((isWide || isCompact) && canManage) ...[
               const SizedBox(width: 8),
               _AddButton(onTap: onNew),
             ],
           ],
         ),
-        if (!isWide && canManage) ...[
+        if (!isWide && !isCompact && canManage) ...[
           const SizedBox(height: 12),
           SizedBox(
               width: double.infinity, child: _AddButton(onTap: onNew)),

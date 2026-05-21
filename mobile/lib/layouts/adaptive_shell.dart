@@ -10,8 +10,11 @@ class AdaptiveShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDesktop = MediaQuery.sizeOf(context).width >= 900;
-    return isDesktop
+    // Use shortestSide so tablets get the desktop shell in both portrait and landscape.
+    // Phones (shortestSide ≈ 360–414) stay on MobileShell even when rotated.
+    // Tablets and desktops (shortestSide ≥ 600) always use DesktopShell.
+    final shortestSide = MediaQuery.sizeOf(context).shortestSide;
+    return shortestSide >= 600
         ? DesktopShell(navigationShell: navigationShell)
         : MobileShell(navigationShell: navigationShell);
   }

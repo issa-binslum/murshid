@@ -158,6 +158,8 @@ class MobileShell extends ConsumerWidget {
       '/businesses': AppStrings.businesses,
       '/reports': AppStrings.reports,
       '/audit': AppStrings.audit,
+      '/profile': 'Profile',
+      '/settings': 'Settings',
     };
     return map[location] ?? AppStrings.appName;
   }

@@ -8,6 +8,8 @@ import '../core/providers/sidebar_provider.dart';
 import '../router/route_names.dart';
 import 'business_switcher_widget.dart';
 
+enum _UserMenuAction { profile, settings, logout }
+
 class NavItem {
   final String label;
   final IconData icon;
@@ -246,6 +248,8 @@ class SidebarWidget extends ConsumerWidget {
       RouteNames.reports: '/reports',
       RouteNames.audit: '/audit',
       RouteNames.noAccess: '/no-access',
+      RouteNames.profile: '/profile',
+      RouteNames.settings: '/settings',
     };
     return map[routeName] ?? '';
   }
@@ -400,7 +404,14 @@ class _NavTile extends StatelessWidget {
             borderRadius: BorderRadius.circular(6),
             child: InkWell(
               borderRadius: BorderRadius.circular(6),
-              onTap: effectivelyLocked ? null : () => context.goNamed(item.routeName),
+              onTap: effectivelyLocked
+                  ? null
+                  : () {
+                      if (Scaffold.maybeOf(context)?.isDrawerOpen == true) {
+                        Navigator.of(context).pop();
+                      }
+                      context.goNamed(item.routeName);
+                    },
               child: Container(
                 decoration: isActive
                     ? BoxDecoration(
@@ -463,8 +474,17 @@ class _UserTile extends ConsumerWidget {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 12),
         child: Center(
-          child: GestureDetector(
-            onTap: () => _showLogout(context, ref),
+          child: PopupMenuButton<_UserMenuAction>(
+            tooltip: '',
+            offset: const Offset(64, 0),
+            color: AppColors.cardBackground,
+            elevation: 6,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+              side: const BorderSide(color: AppColors.border),
+            ),
+            onSelected: (action) => _handleAction(context, ref, action),
+            itemBuilder: (_) => _menuItems(),
             child: CircleAvatar(
               radius: 16,
               backgroundColor: AppColors.primaryDark,
@@ -479,8 +499,16 @@ class _UserTile extends ConsumerWidget {
       );
     }
 
-    return InkWell(
-      onTap: () => _showLogout(context, ref),
+    return PopupMenuButton<_UserMenuAction>(
+      tooltip: '',
+      color: AppColors.cardBackground,
+      elevation: 6,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+        side: const BorderSide(color: AppColors.border),
+      ),
+      onSelected: (action) => _handleAction(context, ref, action),
+      itemBuilder: (_) => _menuItems(),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Row(
@@ -509,7 +537,7 @@ class _UserTile extends ConsumerWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    'Administrator',
+                    auth.currentBusiness?.isOwner == true ? 'Owner' : 'Member',
                     style: const TextStyle(
                         color: AppColors.textSecondary, fontSize: 11),
                     overflow: TextOverflow.ellipsis,
@@ -523,6 +551,65 @@ class _UserTile extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  List<PopupMenuEntry<_UserMenuAction>> _menuItems() => [
+        const PopupMenuItem<_UserMenuAction>(
+          value: _UserMenuAction.profile,
+          child: Row(children: [
+            Icon(Icons.manage_accounts_outlined,
+                size: 18, color: AppColors.textSecondary),
+            SizedBox(width: 10),
+            Text('Profile',
+                style: TextStyle(
+                    fontSize: 13,
+                    color: AppColors.textPrimary,
+                    fontWeight: FontWeight.w500)),
+          ]),
+        ),
+        const PopupMenuItem<_UserMenuAction>(
+          value: _UserMenuAction.settings,
+          child: Row(children: [
+            Icon(Icons.settings_outlined,
+                size: 18, color: AppColors.textSecondary),
+            SizedBox(width: 10),
+            Text('Settings',
+                style: TextStyle(
+                    fontSize: 13,
+                    color: AppColors.textPrimary,
+                    fontWeight: FontWeight.w500)),
+          ]),
+        ),
+        const PopupMenuDivider(height: 1),
+        const PopupMenuItem<_UserMenuAction>(
+          value: _UserMenuAction.logout,
+          child: Row(children: [
+            Icon(Icons.logout_rounded, size: 18, color: AppColors.dangerText),
+            SizedBox(width: 10),
+            Text('Sign Out',
+                style: TextStyle(
+                    fontSize: 13,
+                    color: AppColors.dangerText,
+                    fontWeight: FontWeight.w500)),
+          ]),
+        ),
+      ];
+
+  void _handleAction(
+      BuildContext context, WidgetRef ref, _UserMenuAction action) {
+    // Close the drawer first for navigation actions
+    if (action != _UserMenuAction.logout) {
+      if (Scaffold.maybeOf(context)?.isDrawerOpen == true) {
+        Navigator.of(context).pop();
+      }
+    }
+    if (action == _UserMenuAction.profile) {
+      context.go(RoutePaths.profile);
+    } else if (action == _UserMenuAction.settings) {
+      context.go(RoutePaths.settings);
+    } else {
+      _showLogout(context, ref);
+    }
   }
 
   String _initials(String name) {

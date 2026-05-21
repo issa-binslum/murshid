@@ -186,9 +186,12 @@ class _AuditScreenState extends ConsumerState<AuditScreen> {
   Widget build(BuildContext context, ) {
     final state = ref.watch(auditProvider);
     final notifier = ref.read(auditProvider.notifier);
-    final isWide = MediaQuery.sizeOf(context).width >= 720;
+    final size = MediaQuery.sizeOf(context);
+    final isWide = size.width >= 720;
+    final isCompact = size.height < 500;
 
     return Scaffold(
+      resizeToAvoidBottomInset: !isCompact,
       backgroundColor: AppColors.pageBackground,
       body: Padding(
         padding: EdgeInsets.all(isWide ? 32 : 16),

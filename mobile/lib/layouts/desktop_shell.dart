@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../core/constants/app_colors.dart';
 import '../core/providers/auth_provider.dart';
 import '../core/providers/money_visibility_provider.dart';
+import '../router/route_names.dart';
 import 'sidebar_widget.dart';
 
 class DesktopShell extends ConsumerWidget {
@@ -171,53 +172,8 @@ class _TopBar extends ConsumerWidget {
                   width: 1, thickness: 1, color: AppColors.border),
               const SizedBox(width: 12),
 
-              // User avatar + name + role
-              InkWell(
-                borderRadius: BorderRadius.circular(8),
-                onTap: () => _showLogout(context, ref),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 8, vertical: 4),
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 16,
-                        backgroundColor: AppColors.primaryDark,
-                        child: Text(
-                          initials,
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 11,
-                              fontWeight: FontWeight.w700),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            auth.user?.fullName ?? '',
-                            style: const TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.textPrimary),
-                          ),
-                          const Text(
-                            'Administrator',
-                            style: TextStyle(
-                                fontSize: 11,
-                                color: AppColors.textSecondary),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(width: 4),
-                      const Icon(Icons.keyboard_arrow_down_rounded,
-                          size: 18, color: AppColors.textSecondary),
-                    ],
-                  ),
-                ),
-              ),
+              // User avatar + name + role — dropdown menu
+              _UserMenu(auth: auth, initials: initials),
             ],
           ),
         ],
@@ -249,13 +205,141 @@ class _TopBar extends ConsumerWidget {
       '/businesses': 'Businesses',
       '/reports': 'Reports',
       '/audit': 'Audit Log',
+      '/profile': 'Profile',
+      '/settings': 'Settings',
       '/no-access': '',
     };
     return map[location] ?? '';
   }
+}
+
+// ── User dropdown menu ────────────────────────────────────────────────────────
+
+enum _UserMenuAction { profile, settings, logout }
+
+class _UserMenu extends ConsumerWidget {
+  final AuthState auth;
+  final String initials;
+
+  const _UserMenu({required this.auth, required this.initials});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return PopupMenuButton<_UserMenuAction>(
+      offset: const Offset(0, 44),
+      color: AppColors.cardBackground,
+      elevation: 6,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+        side: const BorderSide(color: AppColors.border),
+      ),
+      onSelected: (action) {
+        if (action == _UserMenuAction.profile) {
+          context.go(RoutePaths.profile);
+        } else if (action == _UserMenuAction.settings) {
+          context.go(RoutePaths.settings);
+        } else {
+          _showLogout(context, ref);
+        }
+      },
+      itemBuilder: (_) => [
+        PopupMenuItem<_UserMenuAction>(
+          value: _UserMenuAction.profile,
+          child: Row(
+            children: const [
+              Icon(Icons.manage_accounts_outlined,
+                  size: 18, color: AppColors.textSecondary),
+              SizedBox(width: 10),
+              Text(
+                'Profile',
+                style: TextStyle(
+                    fontSize: 13,
+                    color: AppColors.textPrimary,
+                    fontWeight: FontWeight.w500),
+              ),
+            ],
+          ),
+        ),
+        PopupMenuItem<_UserMenuAction>(
+          value: _UserMenuAction.settings,
+          child: Row(
+            children: const [
+              Icon(Icons.settings_outlined,
+                  size: 18, color: AppColors.textSecondary),
+              SizedBox(width: 10),
+              Text(
+                'Settings',
+                style: TextStyle(
+                    fontSize: 13,
+                    color: AppColors.textPrimary,
+                    fontWeight: FontWeight.w500),
+              ),
+            ],
+          ),
+        ),
+        const PopupMenuDivider(height: 1),
+        PopupMenuItem<_UserMenuAction>(
+          value: _UserMenuAction.logout,
+          child: Row(
+            children: const [
+              Icon(Icons.logout_rounded, size: 18, color: AppColors.dangerText),
+              SizedBox(width: 10),
+              Text(
+                'Sign Out',
+                style: TextStyle(
+                    fontSize: 13,
+                    color: AppColors.dangerText,
+                    fontWeight: FontWeight.w500),
+              ),
+            ],
+          ),
+        ),
+      ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        child: Row(
+          children: [
+            CircleAvatar(
+              radius: 16,
+              backgroundColor: AppColors.primaryDark,
+              child: Text(
+                initials,
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  auth.user?.fullName ?? '',
+                  style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textPrimary),
+                ),
+                Text(
+                  auth.currentBusiness?.isOwner == true ? 'Owner' : 'Member',
+                  style: const TextStyle(
+                      fontSize: 11, color: AppColors.textSecondary),
+                ),
+              ],
+            ),
+            const SizedBox(width: 4),
+            const Icon(Icons.keyboard_arrow_down_rounded,
+                size: 18, color: AppColors.textSecondary),
+          ],
+        ),
+      ),
+    );
+  }
 
   void _showLogout(BuildContext context, WidgetRef ref) {
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (_) => Dialog(
         backgroundColor: AppColors.sidebarBackground,

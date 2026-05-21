@@ -319,13 +319,13 @@ class _PageHeader extends StatelessWidget {
       _ActionBtn(label: 'PDF', icon: Icons.picture_as_pdf_outlined, onTap: onPdf),
       _CopyToBtn(onCopyToReceipt: onCopyToReceipt, onDuplicateInvoice: onDuplicateInvoice),
       if (canManage && !isCancelled) ...[
-        if (onMarkPaid != null)
-          _ActionBtn(
-            label: 'Mark as Paid',
-            icon: Icons.check_circle_outline_rounded,
-            color: AppColors.successText,
-            onTap: onMarkPaid!,
-          ),
+        // if (onMarkPaid != null)
+        //   _ActionBtn(
+        //     label: 'Mark as Paid',
+        //     icon: Icons.check_circle_outline_rounded,
+        //     color: AppColors.successText,
+        //     onTap: onMarkPaid!,
+        //   ),
         _ActionBtn(label: 'Edit', icon: Icons.edit_outlined, onTap: onEdit),
         if (onCancel != null)
           _ActionBtn(

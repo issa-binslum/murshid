@@ -18,6 +18,8 @@ class RouteNames {
   static const String reports = 'reports';
   static const String audit = 'audit';
   static const String noAccess = 'noAccess';
+  static const String profile = 'profile';
+  static const String settings = 'settings';
 }
 
 class RoutePaths {
@@ -40,4 +42,6 @@ class RoutePaths {
   static const String reports = '/reports';
   static const String audit = '/audit';
   static const String noAccess = '/no-access';
+  static const String profile = '/profile';
+  static const String settings = '/settings';
 }

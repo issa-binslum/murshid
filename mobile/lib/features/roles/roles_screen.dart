@@ -170,9 +170,12 @@ class RolesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isWide = MediaQuery.sizeOf(context).width >= 720;
+    final size = MediaQuery.sizeOf(context);
+    final isWide = size.width >= 720;
+    final isCompact = size.height < 500;
 
     return Scaffold(
+      resizeToAvoidBottomInset: !isCompact,
       backgroundColor: AppColors.pageBackground,
       body: SingleChildScrollView(
         padding: EdgeInsets.all(isWide ? 32 : 16),

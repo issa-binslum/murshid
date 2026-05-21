@@ -27,46 +27,20 @@ class LoginScreen extends StatelessWidget {
                 ],
               ),
             )
-          : SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 56),
-              child: Column(
-                children: [
-                  const SizedBox(height: 16),
-                  const _FormCard(),
-                ],
+          : LayoutBuilder(
+              builder: (context, constraints) => SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 24, vertical: 24),
+                child: ConstrainedBox(
+                  constraints:
+                      BoxConstraints(minHeight: constraints.maxHeight - 48),
+                  child: const Center(child: _FormCard()),
+                ),
               ),
             ),
     );
   }
 
-  static Widget _buildCrest(double size) {
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        shape: BoxShape.circle,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withAlpha(20),
-            blurRadius: 16,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      alignment: Alignment.center,
-      // If you have the SUZA crest PNG, replace body with:
-      // child: Image.asset('assets/suza_crest.png', width: size * 0.65),
-      child: Text(
-        'S',
-        style: TextStyle(
-          fontSize: size * 0.5,
-          fontWeight: FontWeight.w900,
-          color: const Color(0xFF1B2E6B),
-        ),
-      ),
-    );
-  }
 }
 
 // ── Left branding panel ───────────────────────────────────────────────────────

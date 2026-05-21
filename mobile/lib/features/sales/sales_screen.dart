@@ -17,11 +17,14 @@ class SalesScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final canManage = ref.watch(authProvider).hasPermission('sales:manage');
-    final isWide = MediaQuery.sizeOf(context).width >= 700;
+    final size = MediaQuery.sizeOf(context);
+    final isWide = size.width >= 700;
+    final isCompact = size.height < 500;
 
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        resizeToAvoidBottomInset: !isCompact,
         backgroundColor: AppColors.pageBackground,
         body: Padding(
           padding: EdgeInsets.all(isWide ? 32 : 16),
