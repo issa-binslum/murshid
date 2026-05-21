@@ -2,27 +2,92 @@ import { Router } from "express";
 import { z } from "zod";
 import { prisma } from "../../server/prisma";
 import { getBusinessContext } from "../../server/businessAuth";
-import { requirePermission } from "../../server/rbac";
+import { requireAnyPermission, requirePermission } from "../../server/rbac";
 import { auditLog } from "../../server/audit";
 
 export const paymentsRouter = Router();
 
+// Recalculates every non-cancelled purchase invoice for a supplier (FIFO).
+// Runs OUTSIDE the main transaction to avoid long-held connections on Neon.
+async function recalcSupplierInvoices(supplierId: string) {
+  const [invoices, payments] = await Promise.all([
+    prisma.purchaseInvoice.findMany({
+      where: { supplierId, deletedAt: null, cancelledAt: null },
+      orderBy: { date: "asc" },
+      select: { id: true, total: true },
+    }),
+    prisma.payment.findMany({
+      where: { supplierId, deletedAt: null },
+      select: { amount: true },
+    }),
+  ]);
+
+  let remaining = payments.reduce((s, p) => s + Number(p.amount), 0);
+
+  const updates = invoices.map((inv) => {
+    const total = Number(inv.total);
+    let status: string;
+    let paidAmount: number;
+
+    if (remaining <= 0) {
+      status = "UNPAID";
+      paidAmount = 0;
+    } else if (remaining >= total) {
+      status = "PAID";
+      paidAmount = total;
+      remaining -= total;
+    } else {
+      status = "PARTIAL";
+      paidAmount = remaining;
+      remaining = 0;
+    }
+
+    return prisma.purchaseInvoice.update({
+      where: { id: inv.id },
+      data: { status, paidAmount },
+    });
+  });
+
+  if (updates.length > 0) {
+    await prisma.$transaction(updates);
+  }
+}
+
 const createSchema = z.object({
   date: z.coerce.date(),
   payee: z.string().optional().nullable(),
+  supplierId: z.string().uuid().optional().nullable(),
   accountId: z.string().uuid(),
   amount: z.coerce.number().finite().positive(),
   description: z.string().optional().nullable(),
 });
 
-paymentsRouter.get("/", ...requirePermission("payments:manage"), async (req, res) => {
+paymentsRouter.get("/", ...requireAnyPermission("payments:view", "payments:manage"), async (req, res) => {
   const ctx = getBusinessContext(req)!;
-  const items = await prisma.payment.findMany({
-    where: { businessId: ctx.businessId, deletedAt: null },
-    orderBy: { date: "desc" },
-    take: 200,
-  });
-  return res.json({ items });
+  const q = typeof req.query.q === "string" ? req.query.q.trim() : "";
+  const page = Math.max(1, parseInt(String(req.query.page ?? "1")) || 1);
+  const limit = Math.min(100, Math.max(1, parseInt(String(req.query.limit ?? "25")) || 25));
+  const skip = (page - 1) * limit;
+
+  const where = {
+    businessId: ctx.businessId,
+    deletedAt: null,
+    ...(q
+      ? {
+          OR: [
+            { payee: { contains: q, mode: "insensitive" } },
+            { description: { contains: q, mode: "insensitive" } },
+          ],
+        }
+      : {}),
+  };
+
+  const [items, total] = await Promise.all([
+    prisma.payment.findMany({ where, orderBy: { date: "desc" }, skip, take: limit }),
+    prisma.payment.count({ where }),
+  ]);
+
+  return res.json({ items, total, page, limit });
 });
 
 paymentsRouter.post("/", ...requirePermission("payments:manage"), async (req, res) => {
@@ -38,22 +103,36 @@ paymentsRouter.post("/", ...requirePermission("payments:manage"), async (req, re
   const nextBalance = Number(account.currentBalance) - parsed.data.amount;
   if (nextBalance < 0) return res.status(400).json({ error: "insufficient_funds" });
 
-  const [payment] = await prisma.$transaction([
-    prisma.payment.create({
+  // Main transaction: create payment + update balances (kept small/fast)
+  const payment = await prisma.$transaction(async (tx) => {
+    const p = await tx.payment.create({
       data: {
         businessId: ctx.businessId,
         date: parsed.data.date,
         payee: parsed.data.payee ?? null,
+        supplierId: parsed.data.supplierId ?? null,
         accountId: parsed.data.accountId,
         amount: parsed.data.amount,
         description: parsed.data.description ?? null,
       },
-    }),
-    prisma.account.update({
+    });
+    await tx.account.update({
       where: { id: parsed.data.accountId },
       data: { currentBalance: nextBalance },
-    }),
-  ]);
+    });
+    if (parsed.data.supplierId) {
+      await tx.supplier.update({
+        where: { id: parsed.data.supplierId },
+        data: { balance: { decrement: parsed.data.amount } },
+      });
+    }
+    return p;
+  });
+
+  // Recalc invoice statuses after the transaction commits
+  if (parsed.data.supplierId) {
+    await recalcSupplierInvoices(parsed.data.supplierId);
+  }
 
   await auditLog({
     businessId: ctx.businessId,
@@ -74,16 +153,24 @@ paymentsRouter.delete("/:id", ...requirePermission("payments:manage"), async (re
   const payment = await prisma.payment.findFirst({ where: { id, businessId: ctx.businessId, deletedAt: null } });
   if (!payment) return res.status(404).json({ error: "not_found" });
 
-  const account = await prisma.account.findFirst({ where: { id: payment.accountId, businessId: ctx.businessId, deletedAt: null } });
-  if (!account) return res.status(400).json({ error: "invalid_account" });
-
-  await prisma.$transaction([
-    prisma.payment.update({ where: { id }, data: { deletedAt: new Date() } }),
-    prisma.account.update({
+  await prisma.$transaction(async (tx) => {
+    await tx.payment.update({ where: { id }, data: { deletedAt: new Date() } });
+    await tx.account.update({
       where: { id: payment.accountId },
-      data: { currentBalance: Number(account.currentBalance) + Number(payment.amount) },
-    }),
-  ]);
+      data: { currentBalance: { increment: Number(payment.amount) } },
+    });
+    if (payment.supplierId) {
+      await tx.supplier.update({
+        where: { id: payment.supplierId },
+        data: { balance: { increment: Number(payment.amount) } },
+      });
+    }
+  });
+
+  // Recalc AFTER the payment is soft-deleted (so it's excluded from the sum)
+  if (payment.supplierId) {
+    await recalcSupplierInvoices(payment.supplierId);
+  }
 
   await auditLog({
     businessId: ctx.businessId,
@@ -95,4 +182,3 @@ paymentsRouter.delete("/:id", ...requirePermission("payments:manage"), async (re
 
   return res.status(204).send();
 });
-

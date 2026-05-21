@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { z } from "zod";
 import { prisma } from "../../server/prisma";
-import { getBusinessContext } from "../../server/businessAuth";
-import { requirePermission } from "../../server/rbac";
+import { getBusinessContext, requireBusinessContext } from "../../server/businessAuth";
+import { requireAnyPermission, requirePermission } from "../../server/rbac";
 import { auditLog } from "../../server/audit";
 
 export const customersRouter = Router();
@@ -18,28 +18,33 @@ const createSchema = z.object({
 
 const updateSchema = createSchema.partial().refine((v) => Object.keys(v).length > 0, { message: "empty" });
 
-customersRouter.get("/", ...requirePermission("customers:manage"), async (req, res) => {
+customersRouter.get("/", ...requireAnyPermission("customers:view", "customers:manage"), async (req, res) => {
   const ctx = getBusinessContext(req)!;
   const q = typeof req.query.q === "string" ? req.query.q.trim() : "";
+  const page = Math.max(1, parseInt(String(req.query.page ?? "1")) || 1);
+  const limit = Math.min(100, Math.max(1, parseInt(String(req.query.limit ?? "25")) || 25));
+  const skip = (page - 1) * limit;
 
-  const items = await prisma.customer.findMany({
-    where: {
-      businessId: ctx.businessId,
-      deletedAt: null,
-      ...(q
-        ? {
-            OR: [
-              { name: { contains: q, mode: "insensitive" } },
-              { phone: { contains: q, mode: "insensitive" } },
-              { email: { contains: q, mode: "insensitive" } },
-            ],
-          }
-        : {}),
-    },
-    orderBy: { createdAt: "desc" },
-  });
+  const where = {
+    businessId: ctx.businessId,
+    deletedAt: null,
+    ...(q
+      ? {
+          OR: [
+            { name: { contains: q, mode: "insensitive" } },
+            { phone: { contains: q, mode: "insensitive" } },
+            { email: { contains: q, mode: "insensitive" } },
+          ],
+        }
+      : {}),
+  };
 
-  return res.json({ items });
+  const [items, total] = await Promise.all([
+    prisma.customer.findMany({ where, orderBy: { createdAt: "desc" }, skip, take: limit }),
+    prisma.customer.count({ where }),
+  ]);
+
+  return res.json({ items, total, page, limit });
 });
 
 customersRouter.post("/", ...requirePermission("customers:manage"), async (req, res) => {

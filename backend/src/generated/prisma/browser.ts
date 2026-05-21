@@ -53,6 +53,11 @@ export type RolePermission = Prisma.RolePermissionModel
  */
 export type Session = Prisma.SessionModel
 /**
+ * Model TokenBlocklist
+ * 
+ */
+export type TokenBlocklist = Prisma.TokenBlocklistModel
+/**
  * Model Account
  * 
  */
@@ -122,6 +127,11 @@ export type PurchaseInvoiceItem = Prisma.PurchaseInvoiceItemModel
  * 
  */
 export type Receipt = Prisma.ReceiptModel
+/**
+ * Model ReceiptItem
+ * 
+ */
+export type ReceiptItem = Prisma.ReceiptItemModel
 /**
  * Model Payment
  * 

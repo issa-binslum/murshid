@@ -2,7 +2,7 @@ import { Router } from "express";
 import { z } from "zod";
 import { prisma } from "../../server/prisma";
 import { getBusinessContext } from "../../server/businessAuth";
-import { requirePermission } from "../../server/rbac";
+import { requireAnyPermission, requirePermission } from "../../server/rbac";
 import { auditLog } from "../../server/audit";
 
 export const suppliersRouter = Router();
@@ -17,28 +17,33 @@ const createSchema = z.object({
 
 const updateSchema = createSchema.partial().refine((v) => Object.keys(v).length > 0, { message: "empty" });
 
-suppliersRouter.get("/", ...requirePermission("suppliers:manage"), async (req, res) => {
+suppliersRouter.get("/", ...requireAnyPermission("suppliers:view", "suppliers:manage"), async (req, res) => {
   const ctx = getBusinessContext(req)!;
   const q = typeof req.query.q === "string" ? req.query.q.trim() : "";
+  const page = Math.max(1, parseInt(String(req.query.page ?? "1")) || 1);
+  const limit = Math.min(100, Math.max(1, parseInt(String(req.query.limit ?? "25")) || 25));
+  const skip = (page - 1) * limit;
 
-  const items = await prisma.supplier.findMany({
-    where: {
-      businessId: ctx.businessId,
-      deletedAt: null,
-      ...(q
-        ? {
-            OR: [
-              { name: { contains: q, mode: "insensitive" } },
-              { phone: { contains: q, mode: "insensitive" } },
-              { email: { contains: q, mode: "insensitive" } },
-            ],
-          }
-        : {}),
-    },
-    orderBy: { createdAt: "desc" },
-  });
+  const where = {
+    businessId: ctx.businessId,
+    deletedAt: null,
+    ...(q
+      ? {
+          OR: [
+            { name: { contains: q, mode: "insensitive" } },
+            { phone: { contains: q, mode: "insensitive" } },
+            { email: { contains: q, mode: "insensitive" } },
+          ],
+        }
+      : {}),
+  };
 
-  return res.json({ items });
+  const [items, total] = await Promise.all([
+    prisma.supplier.findMany({ where, orderBy: { createdAt: "desc" }, skip, take: limit }),
+    prisma.supplier.count({ where }),
+  ]);
+
+  return res.json({ items, total, page, limit });
 });
 
 suppliersRouter.post("/", ...requirePermission("suppliers:manage"), async (req, res) => {

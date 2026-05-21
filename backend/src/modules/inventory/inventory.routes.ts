@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { z } from "zod";
 import { prisma } from "../../server/prisma";
-import { getBusinessContext } from "../../server/businessAuth";
-import { requirePermission } from "../../server/rbac";
+import { getBusinessContext, requireBusinessContext } from "../../server/businessAuth";
+import { requireAnyPermission, requirePermission } from "../../server/rbac";
 import { auditLog } from "../../server/audit";
 
 export const inventoryRouter = Router();
@@ -20,26 +20,32 @@ const createSchema = z.object({
 
 const updateSchema = createSchema.partial().refine((v) => Object.keys(v).length > 0, { message: "empty" });
 
-inventoryRouter.get("/", ...requirePermission("inventory:manage"), async (req, res) => {
+inventoryRouter.get("/", ...requireAnyPermission("inventory:view", "inventory:manage"), async (req, res) => {
   const ctx = getBusinessContext(req)!;
   const q = typeof req.query.q === "string" ? req.query.q.trim() : "";
+  const page = Math.max(1, parseInt(String(req.query.page ?? "1")) || 1);
+  const limit = Math.min(100, Math.max(1, parseInt(String(req.query.limit ?? "25")) || 25));
+  const skip = (page - 1) * limit;
 
-  const items = await prisma.inventoryItem.findMany({
-    where: {
-      businessId: ctx.businessId,
-      deletedAt: null,
-      ...(q
-        ? {
-            OR: [
-              { itemCode: { contains: q, mode: "insensitive" } },
-              { itemName: { contains: q, mode: "insensitive" } },
-            ],
-          }
-        : {}),
-    },
-    orderBy: { createdAt: "desc" },
-  });
-  return res.json({ items });
+  const where = {
+    businessId: ctx.businessId,
+    deletedAt: null,
+    ...(q
+      ? {
+          OR: [
+            { itemCode: { contains: q, mode: "insensitive" } },
+            { itemName: { contains: q, mode: "insensitive" } },
+          ],
+        }
+      : {}),
+  };
+
+  const [items, total] = await Promise.all([
+    prisma.inventoryItem.findMany({ where, orderBy: { createdAt: "desc" }, skip, take: limit }),
+    prisma.inventoryItem.count({ where }),
+  ]);
+
+  return res.json({ items, total, page, limit });
 });
 
 inventoryRouter.get("/low-stock", ...requirePermission("inventory:manage"), async (req, res) => {

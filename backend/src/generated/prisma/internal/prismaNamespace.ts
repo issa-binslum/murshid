@@ -391,6 +391,7 @@ export const ModelName = {
   Permission: 'Permission',
   RolePermission: 'RolePermission',
   Session: 'Session',
+  TokenBlocklist: 'TokenBlocklist',
   Account: 'Account',
   Customer: 'Customer',
   Supplier: 'Supplier',
@@ -405,6 +406,7 @@ export const ModelName = {
   PurchaseInvoice: 'PurchaseInvoice',
   PurchaseInvoiceItem: 'PurchaseInvoiceItem',
   Receipt: 'Receipt',
+  ReceiptItem: 'ReceiptItem',
   Payment: 'Payment',
   AuditLog: 'AuditLog'
 } as const
@@ -422,7 +424,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "business" | "user" | "userBusiness" | "role" | "permission" | "rolePermission" | "session" | "account" | "customer" | "supplier" | "inventoryItem" | "inventoryMovement" | "salesOrder" | "salesOrderItem" | "salesInvoice" | "salesInvoiceItem" | "purchaseOrder" | "purchaseOrderItem" | "purchaseInvoice" | "purchaseInvoiceItem" | "receipt" | "payment" | "auditLog"
+    modelProps: "business" | "user" | "userBusiness" | "role" | "permission" | "rolePermission" | "session" | "tokenBlocklist" | "account" | "customer" | "supplier" | "inventoryItem" | "inventoryMovement" | "salesOrder" | "salesOrderItem" | "salesInvoice" | "salesInvoiceItem" | "purchaseOrder" | "purchaseOrderItem" | "purchaseInvoice" | "purchaseInvoiceItem" | "receipt" | "receiptItem" | "payment" | "auditLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -941,6 +943,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.SessionCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.SessionCountAggregateOutputType> | number
+        }
+      }
+    }
+    TokenBlocklist: {
+      payload: Prisma.$TokenBlocklistPayload<ExtArgs>
+      fields: Prisma.TokenBlocklistFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TokenBlocklistFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TokenBlocklistPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TokenBlocklistFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TokenBlocklistPayload>
+        }
+        findFirst: {
+          args: Prisma.TokenBlocklistFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TokenBlocklistPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TokenBlocklistFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TokenBlocklistPayload>
+        }
+        findMany: {
+          args: Prisma.TokenBlocklistFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TokenBlocklistPayload>[]
+        }
+        create: {
+          args: Prisma.TokenBlocklistCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TokenBlocklistPayload>
+        }
+        createMany: {
+          args: Prisma.TokenBlocklistCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TokenBlocklistCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TokenBlocklistPayload>[]
+        }
+        delete: {
+          args: Prisma.TokenBlocklistDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TokenBlocklistPayload>
+        }
+        update: {
+          args: Prisma.TokenBlocklistUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TokenBlocklistPayload>
+        }
+        deleteMany: {
+          args: Prisma.TokenBlocklistDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TokenBlocklistUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TokenBlocklistUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TokenBlocklistPayload>[]
+        }
+        upsert: {
+          args: Prisma.TokenBlocklistUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TokenBlocklistPayload>
+        }
+        aggregate: {
+          args: Prisma.TokenBlocklistAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTokenBlocklist>
+        }
+        groupBy: {
+          args: Prisma.TokenBlocklistGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TokenBlocklistGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TokenBlocklistCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TokenBlocklistCountAggregateOutputType> | number
         }
       }
     }
@@ -1980,6 +2056,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ReceiptItem: {
+      payload: Prisma.$ReceiptItemPayload<ExtArgs>
+      fields: Prisma.ReceiptItemFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ReceiptItemFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReceiptItemPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ReceiptItemFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReceiptItemPayload>
+        }
+        findFirst: {
+          args: Prisma.ReceiptItemFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReceiptItemPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ReceiptItemFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReceiptItemPayload>
+        }
+        findMany: {
+          args: Prisma.ReceiptItemFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReceiptItemPayload>[]
+        }
+        create: {
+          args: Prisma.ReceiptItemCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReceiptItemPayload>
+        }
+        createMany: {
+          args: Prisma.ReceiptItemCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ReceiptItemCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReceiptItemPayload>[]
+        }
+        delete: {
+          args: Prisma.ReceiptItemDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReceiptItemPayload>
+        }
+        update: {
+          args: Prisma.ReceiptItemUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReceiptItemPayload>
+        }
+        deleteMany: {
+          args: Prisma.ReceiptItemDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ReceiptItemUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ReceiptItemUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReceiptItemPayload>[]
+        }
+        upsert: {
+          args: Prisma.ReceiptItemUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReceiptItemPayload>
+        }
+        aggregate: {
+          args: Prisma.ReceiptItemAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateReceiptItem>
+        }
+        groupBy: {
+          args: Prisma.ReceiptItemGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ReceiptItemGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ReceiptItemCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ReceiptItemCountAggregateOutputType> | number
+        }
+      }
+    }
     Payment: {
       payload: Prisma.$PaymentPayload<ExtArgs>
       fields: Prisma.PaymentFieldRefs
@@ -2254,6 +2404,16 @@ export const SessionScalarFieldEnum = {
 export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
 
 
+export const TokenBlocklistScalarFieldEnum = {
+  jti: 'jti',
+  userId: 'userId',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt'
+} as const
+
+export type TokenBlocklistScalarFieldEnum = (typeof TokenBlocklistScalarFieldEnum)[keyof typeof TokenBlocklistScalarFieldEnum]
+
+
 export const AccountScalarFieldEnum = {
   id: 'id',
   businessId: 'businessId',
@@ -2461,6 +2621,7 @@ export const ReceiptScalarFieldEnum = {
   businessId: 'businessId',
   date: 'date',
   paidBy: 'paidBy',
+  customerId: 'customerId',
   accountId: 'accountId',
   amount: 'amount',
   description: 'description',
@@ -2472,11 +2633,24 @@ export const ReceiptScalarFieldEnum = {
 export type ReceiptScalarFieldEnum = (typeof ReceiptScalarFieldEnum)[keyof typeof ReceiptScalarFieldEnum]
 
 
+export const ReceiptItemScalarFieldEnum = {
+  id: 'id',
+  receiptId: 'receiptId',
+  itemId: 'itemId',
+  qty: 'qty',
+  unitPrice: 'unitPrice',
+  total: 'total'
+} as const
+
+export type ReceiptItemScalarFieldEnum = (typeof ReceiptItemScalarFieldEnum)[keyof typeof ReceiptItemScalarFieldEnum]
+
+
 export const PaymentScalarFieldEnum = {
   id: 'id',
   businessId: 'businessId',
   date: 'date',
   payee: 'payee',
+  supplierId: 'supplierId',
   accountId: 'accountId',
   amount: 'amount',
   description: 'description',
@@ -2784,6 +2958,7 @@ export type GlobalOmitConfig = {
   permission?: Prisma.PermissionOmit
   rolePermission?: Prisma.RolePermissionOmit
   session?: Prisma.SessionOmit
+  tokenBlocklist?: Prisma.TokenBlocklistOmit
   account?: Prisma.AccountOmit
   customer?: Prisma.CustomerOmit
   supplier?: Prisma.SupplierOmit
@@ -2798,6 +2973,7 @@ export type GlobalOmitConfig = {
   purchaseInvoice?: Prisma.PurchaseInvoiceOmit
   purchaseInvoiceItem?: Prisma.PurchaseInvoiceItemOmit
   receipt?: Prisma.ReceiptOmit
+  receiptItem?: Prisma.ReceiptItemOmit
   payment?: Prisma.PaymentOmit
   auditLog?: Prisma.AuditLogOmit
 }

@@ -298,6 +298,7 @@ export type InventoryItemWhereInput = {
   salesInvoiceItems?: Prisma.SalesInvoiceItemListRelationFilter
   purchaseOrderItems?: Prisma.PurchaseOrderItemListRelationFilter
   purchaseInvoiceItems?: Prisma.PurchaseInvoiceItemListRelationFilter
+  receiptItems?: Prisma.ReceiptItemListRelationFilter
 }
 
 export type InventoryItemOrderByWithRelationInput = {
@@ -320,6 +321,7 @@ export type InventoryItemOrderByWithRelationInput = {
   salesInvoiceItems?: Prisma.SalesInvoiceItemOrderByRelationAggregateInput
   purchaseOrderItems?: Prisma.PurchaseOrderItemOrderByRelationAggregateInput
   purchaseInvoiceItems?: Prisma.PurchaseInvoiceItemOrderByRelationAggregateInput
+  receiptItems?: Prisma.ReceiptItemOrderByRelationAggregateInput
 }
 
 export type InventoryItemWhereUniqueInput = Prisma.AtLeast<{
@@ -346,6 +348,7 @@ export type InventoryItemWhereUniqueInput = Prisma.AtLeast<{
   salesInvoiceItems?: Prisma.SalesInvoiceItemListRelationFilter
   purchaseOrderItems?: Prisma.PurchaseOrderItemListRelationFilter
   purchaseInvoiceItems?: Prisma.PurchaseInvoiceItemListRelationFilter
+  receiptItems?: Prisma.ReceiptItemListRelationFilter
 }, "id" | "businessId_itemCode">
 
 export type InventoryItemOrderByWithAggregationInput = {
@@ -407,6 +410,7 @@ export type InventoryItemCreateInput = {
   salesInvoiceItems?: Prisma.SalesInvoiceItemCreateNestedManyWithoutItemInput
   purchaseOrderItems?: Prisma.PurchaseOrderItemCreateNestedManyWithoutItemInput
   purchaseInvoiceItems?: Prisma.PurchaseInvoiceItemCreateNestedManyWithoutItemInput
+  receiptItems?: Prisma.ReceiptItemCreateNestedManyWithoutItemInput
 }
 
 export type InventoryItemUncheckedCreateInput = {
@@ -428,6 +432,7 @@ export type InventoryItemUncheckedCreateInput = {
   salesInvoiceItems?: Prisma.SalesInvoiceItemUncheckedCreateNestedManyWithoutItemInput
   purchaseOrderItems?: Prisma.PurchaseOrderItemUncheckedCreateNestedManyWithoutItemInput
   purchaseInvoiceItems?: Prisma.PurchaseInvoiceItemUncheckedCreateNestedManyWithoutItemInput
+  receiptItems?: Prisma.ReceiptItemUncheckedCreateNestedManyWithoutItemInput
 }
 
 export type InventoryItemUpdateInput = {
@@ -449,6 +454,7 @@ export type InventoryItemUpdateInput = {
   salesInvoiceItems?: Prisma.SalesInvoiceItemUpdateManyWithoutItemNestedInput
   purchaseOrderItems?: Prisma.PurchaseOrderItemUpdateManyWithoutItemNestedInput
   purchaseInvoiceItems?: Prisma.PurchaseInvoiceItemUpdateManyWithoutItemNestedInput
+  receiptItems?: Prisma.ReceiptItemUpdateManyWithoutItemNestedInput
 }
 
 export type InventoryItemUncheckedUpdateInput = {
@@ -470,6 +476,7 @@ export type InventoryItemUncheckedUpdateInput = {
   salesInvoiceItems?: Prisma.SalesInvoiceItemUncheckedUpdateManyWithoutItemNestedInput
   purchaseOrderItems?: Prisma.PurchaseOrderItemUncheckedUpdateManyWithoutItemNestedInput
   purchaseInvoiceItems?: Prisma.PurchaseInvoiceItemUncheckedUpdateManyWithoutItemNestedInput
+  receiptItems?: Prisma.ReceiptItemUncheckedUpdateManyWithoutItemNestedInput
 }
 
 export type InventoryItemCreateManyInput = {
@@ -713,6 +720,20 @@ export type InventoryItemUpdateOneRequiredWithoutPurchaseInvoiceItemsNestedInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.InventoryItemUpdateToOneWithWhereWithoutPurchaseInvoiceItemsInput, Prisma.InventoryItemUpdateWithoutPurchaseInvoiceItemsInput>, Prisma.InventoryItemUncheckedUpdateWithoutPurchaseInvoiceItemsInput>
 }
 
+export type InventoryItemCreateNestedOneWithoutReceiptItemsInput = {
+  create?: Prisma.XOR<Prisma.InventoryItemCreateWithoutReceiptItemsInput, Prisma.InventoryItemUncheckedCreateWithoutReceiptItemsInput>
+  connectOrCreate?: Prisma.InventoryItemCreateOrConnectWithoutReceiptItemsInput
+  connect?: Prisma.InventoryItemWhereUniqueInput
+}
+
+export type InventoryItemUpdateOneRequiredWithoutReceiptItemsNestedInput = {
+  create?: Prisma.XOR<Prisma.InventoryItemCreateWithoutReceiptItemsInput, Prisma.InventoryItemUncheckedCreateWithoutReceiptItemsInput>
+  connectOrCreate?: Prisma.InventoryItemCreateOrConnectWithoutReceiptItemsInput
+  upsert?: Prisma.InventoryItemUpsertWithoutReceiptItemsInput
+  connect?: Prisma.InventoryItemWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.InventoryItemUpdateToOneWithWhereWithoutReceiptItemsInput, Prisma.InventoryItemUpdateWithoutReceiptItemsInput>, Prisma.InventoryItemUncheckedUpdateWithoutReceiptItemsInput>
+}
+
 export type InventoryItemCreateWithoutBusinessInput = {
   id?: string
   itemCode: string
@@ -731,6 +752,7 @@ export type InventoryItemCreateWithoutBusinessInput = {
   salesInvoiceItems?: Prisma.SalesInvoiceItemCreateNestedManyWithoutItemInput
   purchaseOrderItems?: Prisma.PurchaseOrderItemCreateNestedManyWithoutItemInput
   purchaseInvoiceItems?: Prisma.PurchaseInvoiceItemCreateNestedManyWithoutItemInput
+  receiptItems?: Prisma.ReceiptItemCreateNestedManyWithoutItemInput
 }
 
 export type InventoryItemUncheckedCreateWithoutBusinessInput = {
@@ -751,6 +773,7 @@ export type InventoryItemUncheckedCreateWithoutBusinessInput = {
   salesInvoiceItems?: Prisma.SalesInvoiceItemUncheckedCreateNestedManyWithoutItemInput
   purchaseOrderItems?: Prisma.PurchaseOrderItemUncheckedCreateNestedManyWithoutItemInput
   purchaseInvoiceItems?: Prisma.PurchaseInvoiceItemUncheckedCreateNestedManyWithoutItemInput
+  receiptItems?: Prisma.ReceiptItemUncheckedCreateNestedManyWithoutItemInput
 }
 
 export type InventoryItemCreateOrConnectWithoutBusinessInput = {
@@ -816,6 +839,7 @@ export type InventoryItemCreateWithoutMovementsInput = {
   salesInvoiceItems?: Prisma.SalesInvoiceItemCreateNestedManyWithoutItemInput
   purchaseOrderItems?: Prisma.PurchaseOrderItemCreateNestedManyWithoutItemInput
   purchaseInvoiceItems?: Prisma.PurchaseInvoiceItemCreateNestedManyWithoutItemInput
+  receiptItems?: Prisma.ReceiptItemCreateNestedManyWithoutItemInput
 }
 
 export type InventoryItemUncheckedCreateWithoutMovementsInput = {
@@ -836,6 +860,7 @@ export type InventoryItemUncheckedCreateWithoutMovementsInput = {
   salesInvoiceItems?: Prisma.SalesInvoiceItemUncheckedCreateNestedManyWithoutItemInput
   purchaseOrderItems?: Prisma.PurchaseOrderItemUncheckedCreateNestedManyWithoutItemInput
   purchaseInvoiceItems?: Prisma.PurchaseInvoiceItemUncheckedCreateNestedManyWithoutItemInput
+  receiptItems?: Prisma.ReceiptItemUncheckedCreateNestedManyWithoutItemInput
 }
 
 export type InventoryItemCreateOrConnectWithoutMovementsInput = {
@@ -872,6 +897,7 @@ export type InventoryItemUpdateWithoutMovementsInput = {
   salesInvoiceItems?: Prisma.SalesInvoiceItemUpdateManyWithoutItemNestedInput
   purchaseOrderItems?: Prisma.PurchaseOrderItemUpdateManyWithoutItemNestedInput
   purchaseInvoiceItems?: Prisma.PurchaseInvoiceItemUpdateManyWithoutItemNestedInput
+  receiptItems?: Prisma.ReceiptItemUpdateManyWithoutItemNestedInput
 }
 
 export type InventoryItemUncheckedUpdateWithoutMovementsInput = {
@@ -892,6 +918,7 @@ export type InventoryItemUncheckedUpdateWithoutMovementsInput = {
   salesInvoiceItems?: Prisma.SalesInvoiceItemUncheckedUpdateManyWithoutItemNestedInput
   purchaseOrderItems?: Prisma.PurchaseOrderItemUncheckedUpdateManyWithoutItemNestedInput
   purchaseInvoiceItems?: Prisma.PurchaseInvoiceItemUncheckedUpdateManyWithoutItemNestedInput
+  receiptItems?: Prisma.ReceiptItemUncheckedUpdateManyWithoutItemNestedInput
 }
 
 export type InventoryItemCreateWithoutSalesOrderItemsInput = {
@@ -912,6 +939,7 @@ export type InventoryItemCreateWithoutSalesOrderItemsInput = {
   salesInvoiceItems?: Prisma.SalesInvoiceItemCreateNestedManyWithoutItemInput
   purchaseOrderItems?: Prisma.PurchaseOrderItemCreateNestedManyWithoutItemInput
   purchaseInvoiceItems?: Prisma.PurchaseInvoiceItemCreateNestedManyWithoutItemInput
+  receiptItems?: Prisma.ReceiptItemCreateNestedManyWithoutItemInput
 }
 
 export type InventoryItemUncheckedCreateWithoutSalesOrderItemsInput = {
@@ -932,6 +960,7 @@ export type InventoryItemUncheckedCreateWithoutSalesOrderItemsInput = {
   salesInvoiceItems?: Prisma.SalesInvoiceItemUncheckedCreateNestedManyWithoutItemInput
   purchaseOrderItems?: Prisma.PurchaseOrderItemUncheckedCreateNestedManyWithoutItemInput
   purchaseInvoiceItems?: Prisma.PurchaseInvoiceItemUncheckedCreateNestedManyWithoutItemInput
+  receiptItems?: Prisma.ReceiptItemUncheckedCreateNestedManyWithoutItemInput
 }
 
 export type InventoryItemCreateOrConnectWithoutSalesOrderItemsInput = {
@@ -968,6 +997,7 @@ export type InventoryItemUpdateWithoutSalesOrderItemsInput = {
   salesInvoiceItems?: Prisma.SalesInvoiceItemUpdateManyWithoutItemNestedInput
   purchaseOrderItems?: Prisma.PurchaseOrderItemUpdateManyWithoutItemNestedInput
   purchaseInvoiceItems?: Prisma.PurchaseInvoiceItemUpdateManyWithoutItemNestedInput
+  receiptItems?: Prisma.ReceiptItemUpdateManyWithoutItemNestedInput
 }
 
 export type InventoryItemUncheckedUpdateWithoutSalesOrderItemsInput = {
@@ -988,6 +1018,7 @@ export type InventoryItemUncheckedUpdateWithoutSalesOrderItemsInput = {
   salesInvoiceItems?: Prisma.SalesInvoiceItemUncheckedUpdateManyWithoutItemNestedInput
   purchaseOrderItems?: Prisma.PurchaseOrderItemUncheckedUpdateManyWithoutItemNestedInput
   purchaseInvoiceItems?: Prisma.PurchaseInvoiceItemUncheckedUpdateManyWithoutItemNestedInput
+  receiptItems?: Prisma.ReceiptItemUncheckedUpdateManyWithoutItemNestedInput
 }
 
 export type InventoryItemCreateWithoutSalesInvoiceItemsInput = {
@@ -1008,6 +1039,7 @@ export type InventoryItemCreateWithoutSalesInvoiceItemsInput = {
   salesOrderItems?: Prisma.SalesOrderItemCreateNestedManyWithoutItemInput
   purchaseOrderItems?: Prisma.PurchaseOrderItemCreateNestedManyWithoutItemInput
   purchaseInvoiceItems?: Prisma.PurchaseInvoiceItemCreateNestedManyWithoutItemInput
+  receiptItems?: Prisma.ReceiptItemCreateNestedManyWithoutItemInput
 }
 
 export type InventoryItemUncheckedCreateWithoutSalesInvoiceItemsInput = {
@@ -1028,6 +1060,7 @@ export type InventoryItemUncheckedCreateWithoutSalesInvoiceItemsInput = {
   salesOrderItems?: Prisma.SalesOrderItemUncheckedCreateNestedManyWithoutItemInput
   purchaseOrderItems?: Prisma.PurchaseOrderItemUncheckedCreateNestedManyWithoutItemInput
   purchaseInvoiceItems?: Prisma.PurchaseInvoiceItemUncheckedCreateNestedManyWithoutItemInput
+  receiptItems?: Prisma.ReceiptItemUncheckedCreateNestedManyWithoutItemInput
 }
 
 export type InventoryItemCreateOrConnectWithoutSalesInvoiceItemsInput = {
@@ -1064,6 +1097,7 @@ export type InventoryItemUpdateWithoutSalesInvoiceItemsInput = {
   salesOrderItems?: Prisma.SalesOrderItemUpdateManyWithoutItemNestedInput
   purchaseOrderItems?: Prisma.PurchaseOrderItemUpdateManyWithoutItemNestedInput
   purchaseInvoiceItems?: Prisma.PurchaseInvoiceItemUpdateManyWithoutItemNestedInput
+  receiptItems?: Prisma.ReceiptItemUpdateManyWithoutItemNestedInput
 }
 
 export type InventoryItemUncheckedUpdateWithoutSalesInvoiceItemsInput = {
@@ -1084,6 +1118,7 @@ export type InventoryItemUncheckedUpdateWithoutSalesInvoiceItemsInput = {
   salesOrderItems?: Prisma.SalesOrderItemUncheckedUpdateManyWithoutItemNestedInput
   purchaseOrderItems?: Prisma.PurchaseOrderItemUncheckedUpdateManyWithoutItemNestedInput
   purchaseInvoiceItems?: Prisma.PurchaseInvoiceItemUncheckedUpdateManyWithoutItemNestedInput
+  receiptItems?: Prisma.ReceiptItemUncheckedUpdateManyWithoutItemNestedInput
 }
 
 export type InventoryItemCreateWithoutPurchaseOrderItemsInput = {
@@ -1104,6 +1139,7 @@ export type InventoryItemCreateWithoutPurchaseOrderItemsInput = {
   salesOrderItems?: Prisma.SalesOrderItemCreateNestedManyWithoutItemInput
   salesInvoiceItems?: Prisma.SalesInvoiceItemCreateNestedManyWithoutItemInput
   purchaseInvoiceItems?: Prisma.PurchaseInvoiceItemCreateNestedManyWithoutItemInput
+  receiptItems?: Prisma.ReceiptItemCreateNestedManyWithoutItemInput
 }
 
 export type InventoryItemUncheckedCreateWithoutPurchaseOrderItemsInput = {
@@ -1124,6 +1160,7 @@ export type InventoryItemUncheckedCreateWithoutPurchaseOrderItemsInput = {
   salesOrderItems?: Prisma.SalesOrderItemUncheckedCreateNestedManyWithoutItemInput
   salesInvoiceItems?: Prisma.SalesInvoiceItemUncheckedCreateNestedManyWithoutItemInput
   purchaseInvoiceItems?: Prisma.PurchaseInvoiceItemUncheckedCreateNestedManyWithoutItemInput
+  receiptItems?: Prisma.ReceiptItemUncheckedCreateNestedManyWithoutItemInput
 }
 
 export type InventoryItemCreateOrConnectWithoutPurchaseOrderItemsInput = {
@@ -1160,6 +1197,7 @@ export type InventoryItemUpdateWithoutPurchaseOrderItemsInput = {
   salesOrderItems?: Prisma.SalesOrderItemUpdateManyWithoutItemNestedInput
   salesInvoiceItems?: Prisma.SalesInvoiceItemUpdateManyWithoutItemNestedInput
   purchaseInvoiceItems?: Prisma.PurchaseInvoiceItemUpdateManyWithoutItemNestedInput
+  receiptItems?: Prisma.ReceiptItemUpdateManyWithoutItemNestedInput
 }
 
 export type InventoryItemUncheckedUpdateWithoutPurchaseOrderItemsInput = {
@@ -1180,6 +1218,7 @@ export type InventoryItemUncheckedUpdateWithoutPurchaseOrderItemsInput = {
   salesOrderItems?: Prisma.SalesOrderItemUncheckedUpdateManyWithoutItemNestedInput
   salesInvoiceItems?: Prisma.SalesInvoiceItemUncheckedUpdateManyWithoutItemNestedInput
   purchaseInvoiceItems?: Prisma.PurchaseInvoiceItemUncheckedUpdateManyWithoutItemNestedInput
+  receiptItems?: Prisma.ReceiptItemUncheckedUpdateManyWithoutItemNestedInput
 }
 
 export type InventoryItemCreateWithoutPurchaseInvoiceItemsInput = {
@@ -1200,6 +1239,7 @@ export type InventoryItemCreateWithoutPurchaseInvoiceItemsInput = {
   salesOrderItems?: Prisma.SalesOrderItemCreateNestedManyWithoutItemInput
   salesInvoiceItems?: Prisma.SalesInvoiceItemCreateNestedManyWithoutItemInput
   purchaseOrderItems?: Prisma.PurchaseOrderItemCreateNestedManyWithoutItemInput
+  receiptItems?: Prisma.ReceiptItemCreateNestedManyWithoutItemInput
 }
 
 export type InventoryItemUncheckedCreateWithoutPurchaseInvoiceItemsInput = {
@@ -1220,6 +1260,7 @@ export type InventoryItemUncheckedCreateWithoutPurchaseInvoiceItemsInput = {
   salesOrderItems?: Prisma.SalesOrderItemUncheckedCreateNestedManyWithoutItemInput
   salesInvoiceItems?: Prisma.SalesInvoiceItemUncheckedCreateNestedManyWithoutItemInput
   purchaseOrderItems?: Prisma.PurchaseOrderItemUncheckedCreateNestedManyWithoutItemInput
+  receiptItems?: Prisma.ReceiptItemUncheckedCreateNestedManyWithoutItemInput
 }
 
 export type InventoryItemCreateOrConnectWithoutPurchaseInvoiceItemsInput = {
@@ -1256,6 +1297,7 @@ export type InventoryItemUpdateWithoutPurchaseInvoiceItemsInput = {
   salesOrderItems?: Prisma.SalesOrderItemUpdateManyWithoutItemNestedInput
   salesInvoiceItems?: Prisma.SalesInvoiceItemUpdateManyWithoutItemNestedInput
   purchaseOrderItems?: Prisma.PurchaseOrderItemUpdateManyWithoutItemNestedInput
+  receiptItems?: Prisma.ReceiptItemUpdateManyWithoutItemNestedInput
 }
 
 export type InventoryItemUncheckedUpdateWithoutPurchaseInvoiceItemsInput = {
@@ -1276,6 +1318,107 @@ export type InventoryItemUncheckedUpdateWithoutPurchaseInvoiceItemsInput = {
   salesOrderItems?: Prisma.SalesOrderItemUncheckedUpdateManyWithoutItemNestedInput
   salesInvoiceItems?: Prisma.SalesInvoiceItemUncheckedUpdateManyWithoutItemNestedInput
   purchaseOrderItems?: Prisma.PurchaseOrderItemUncheckedUpdateManyWithoutItemNestedInput
+  receiptItems?: Prisma.ReceiptItemUncheckedUpdateManyWithoutItemNestedInput
+}
+
+export type InventoryItemCreateWithoutReceiptItemsInput = {
+  id?: string
+  itemCode: string
+  itemName: string
+  unitName: string
+  quantity?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  lowStockLevel?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchasePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  salesPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  description?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  business: Prisma.BusinessCreateNestedOneWithoutItemsInput
+  movements?: Prisma.InventoryMovementCreateNestedManyWithoutItemInput
+  salesOrderItems?: Prisma.SalesOrderItemCreateNestedManyWithoutItemInput
+  salesInvoiceItems?: Prisma.SalesInvoiceItemCreateNestedManyWithoutItemInput
+  purchaseOrderItems?: Prisma.PurchaseOrderItemCreateNestedManyWithoutItemInput
+  purchaseInvoiceItems?: Prisma.PurchaseInvoiceItemCreateNestedManyWithoutItemInput
+}
+
+export type InventoryItemUncheckedCreateWithoutReceiptItemsInput = {
+  id?: string
+  businessId: string
+  itemCode: string
+  itemName: string
+  unitName: string
+  quantity?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  lowStockLevel?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchasePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  salesPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  description?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  movements?: Prisma.InventoryMovementUncheckedCreateNestedManyWithoutItemInput
+  salesOrderItems?: Prisma.SalesOrderItemUncheckedCreateNestedManyWithoutItemInput
+  salesInvoiceItems?: Prisma.SalesInvoiceItemUncheckedCreateNestedManyWithoutItemInput
+  purchaseOrderItems?: Prisma.PurchaseOrderItemUncheckedCreateNestedManyWithoutItemInput
+  purchaseInvoiceItems?: Prisma.PurchaseInvoiceItemUncheckedCreateNestedManyWithoutItemInput
+}
+
+export type InventoryItemCreateOrConnectWithoutReceiptItemsInput = {
+  where: Prisma.InventoryItemWhereUniqueInput
+  create: Prisma.XOR<Prisma.InventoryItemCreateWithoutReceiptItemsInput, Prisma.InventoryItemUncheckedCreateWithoutReceiptItemsInput>
+}
+
+export type InventoryItemUpsertWithoutReceiptItemsInput = {
+  update: Prisma.XOR<Prisma.InventoryItemUpdateWithoutReceiptItemsInput, Prisma.InventoryItemUncheckedUpdateWithoutReceiptItemsInput>
+  create: Prisma.XOR<Prisma.InventoryItemCreateWithoutReceiptItemsInput, Prisma.InventoryItemUncheckedCreateWithoutReceiptItemsInput>
+  where?: Prisma.InventoryItemWhereInput
+}
+
+export type InventoryItemUpdateToOneWithWhereWithoutReceiptItemsInput = {
+  where?: Prisma.InventoryItemWhereInput
+  data: Prisma.XOR<Prisma.InventoryItemUpdateWithoutReceiptItemsInput, Prisma.InventoryItemUncheckedUpdateWithoutReceiptItemsInput>
+}
+
+export type InventoryItemUpdateWithoutReceiptItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  itemCode?: Prisma.StringFieldUpdateOperationsInput | string
+  itemName?: Prisma.StringFieldUpdateOperationsInput | string
+  unitName?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lowStockLevel?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchasePrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  salesPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  business?: Prisma.BusinessUpdateOneRequiredWithoutItemsNestedInput
+  movements?: Prisma.InventoryMovementUpdateManyWithoutItemNestedInput
+  salesOrderItems?: Prisma.SalesOrderItemUpdateManyWithoutItemNestedInput
+  salesInvoiceItems?: Prisma.SalesInvoiceItemUpdateManyWithoutItemNestedInput
+  purchaseOrderItems?: Prisma.PurchaseOrderItemUpdateManyWithoutItemNestedInput
+  purchaseInvoiceItems?: Prisma.PurchaseInvoiceItemUpdateManyWithoutItemNestedInput
+}
+
+export type InventoryItemUncheckedUpdateWithoutReceiptItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  itemCode?: Prisma.StringFieldUpdateOperationsInput | string
+  itemName?: Prisma.StringFieldUpdateOperationsInput | string
+  unitName?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lowStockLevel?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchasePrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  salesPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  movements?: Prisma.InventoryMovementUncheckedUpdateManyWithoutItemNestedInput
+  salesOrderItems?: Prisma.SalesOrderItemUncheckedUpdateManyWithoutItemNestedInput
+  salesInvoiceItems?: Prisma.SalesInvoiceItemUncheckedUpdateManyWithoutItemNestedInput
+  purchaseOrderItems?: Prisma.PurchaseOrderItemUncheckedUpdateManyWithoutItemNestedInput
+  purchaseInvoiceItems?: Prisma.PurchaseInvoiceItemUncheckedUpdateManyWithoutItemNestedInput
 }
 
 export type InventoryItemCreateManyBusinessInput = {
@@ -1311,6 +1454,7 @@ export type InventoryItemUpdateWithoutBusinessInput = {
   salesInvoiceItems?: Prisma.SalesInvoiceItemUpdateManyWithoutItemNestedInput
   purchaseOrderItems?: Prisma.PurchaseOrderItemUpdateManyWithoutItemNestedInput
   purchaseInvoiceItems?: Prisma.PurchaseInvoiceItemUpdateManyWithoutItemNestedInput
+  receiptItems?: Prisma.ReceiptItemUpdateManyWithoutItemNestedInput
 }
 
 export type InventoryItemUncheckedUpdateWithoutBusinessInput = {
@@ -1331,6 +1475,7 @@ export type InventoryItemUncheckedUpdateWithoutBusinessInput = {
   salesInvoiceItems?: Prisma.SalesInvoiceItemUncheckedUpdateManyWithoutItemNestedInput
   purchaseOrderItems?: Prisma.PurchaseOrderItemUncheckedUpdateManyWithoutItemNestedInput
   purchaseInvoiceItems?: Prisma.PurchaseInvoiceItemUncheckedUpdateManyWithoutItemNestedInput
+  receiptItems?: Prisma.ReceiptItemUncheckedUpdateManyWithoutItemNestedInput
 }
 
 export type InventoryItemUncheckedUpdateManyWithoutBusinessInput = {
@@ -1359,6 +1504,7 @@ export type InventoryItemCountOutputType = {
   salesInvoiceItems: number
   purchaseOrderItems: number
   purchaseInvoiceItems: number
+  receiptItems: number
 }
 
 export type InventoryItemCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1367,6 +1513,7 @@ export type InventoryItemCountOutputTypeSelect<ExtArgs extends runtime.Types.Ext
   salesInvoiceItems?: boolean | InventoryItemCountOutputTypeCountSalesInvoiceItemsArgs
   purchaseOrderItems?: boolean | InventoryItemCountOutputTypeCountPurchaseOrderItemsArgs
   purchaseInvoiceItems?: boolean | InventoryItemCountOutputTypeCountPurchaseInvoiceItemsArgs
+  receiptItems?: boolean | InventoryItemCountOutputTypeCountReceiptItemsArgs
 }
 
 /**
@@ -1414,6 +1561,13 @@ export type InventoryItemCountOutputTypeCountPurchaseInvoiceItemsArgs<ExtArgs ex
   where?: Prisma.PurchaseInvoiceItemWhereInput
 }
 
+/**
+ * InventoryItemCountOutputType without action
+ */
+export type InventoryItemCountOutputTypeCountReceiptItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ReceiptItemWhereInput
+}
+
 
 export type InventoryItemSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1435,6 +1589,7 @@ export type InventoryItemSelect<ExtArgs extends runtime.Types.Extensions.Interna
   salesInvoiceItems?: boolean | Prisma.InventoryItem$salesInvoiceItemsArgs<ExtArgs>
   purchaseOrderItems?: boolean | Prisma.InventoryItem$purchaseOrderItemsArgs<ExtArgs>
   purchaseInvoiceItems?: boolean | Prisma.InventoryItem$purchaseInvoiceItemsArgs<ExtArgs>
+  receiptItems?: boolean | Prisma.InventoryItem$receiptItemsArgs<ExtArgs>
   _count?: boolean | Prisma.InventoryItemCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["inventoryItem"]>
 
@@ -1496,6 +1651,7 @@ export type InventoryItemInclude<ExtArgs extends runtime.Types.Extensions.Intern
   salesInvoiceItems?: boolean | Prisma.InventoryItem$salesInvoiceItemsArgs<ExtArgs>
   purchaseOrderItems?: boolean | Prisma.InventoryItem$purchaseOrderItemsArgs<ExtArgs>
   purchaseInvoiceItems?: boolean | Prisma.InventoryItem$purchaseInvoiceItemsArgs<ExtArgs>
+  receiptItems?: boolean | Prisma.InventoryItem$receiptItemsArgs<ExtArgs>
   _count?: boolean | Prisma.InventoryItemCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type InventoryItemIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1514,6 +1670,7 @@ export type $InventoryItemPayload<ExtArgs extends runtime.Types.Extensions.Inter
     salesInvoiceItems: Prisma.$SalesInvoiceItemPayload<ExtArgs>[]
     purchaseOrderItems: Prisma.$PurchaseOrderItemPayload<ExtArgs>[]
     purchaseInvoiceItems: Prisma.$PurchaseInvoiceItemPayload<ExtArgs>[]
+    receiptItems: Prisma.$ReceiptItemPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1929,6 +2086,7 @@ export interface Prisma__InventoryItemClient<T, Null = never, ExtArgs extends ru
   salesInvoiceItems<T extends Prisma.InventoryItem$salesInvoiceItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InventoryItem$salesInvoiceItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SalesInvoiceItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   purchaseOrderItems<T extends Prisma.InventoryItem$purchaseOrderItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InventoryItem$purchaseOrderItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PurchaseOrderItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   purchaseInvoiceItems<T extends Prisma.InventoryItem$purchaseInvoiceItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InventoryItem$purchaseInvoiceItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PurchaseInvoiceItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  receiptItems<T extends Prisma.InventoryItem$receiptItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InventoryItem$receiptItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReceiptItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2489,6 +2647,30 @@ export type InventoryItem$purchaseInvoiceItemsArgs<ExtArgs extends runtime.Types
   take?: number
   skip?: number
   distinct?: Prisma.PurchaseInvoiceItemScalarFieldEnum | Prisma.PurchaseInvoiceItemScalarFieldEnum[]
+}
+
+/**
+ * InventoryItem.receiptItems
+ */
+export type InventoryItem$receiptItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ReceiptItem
+   */
+  select?: Prisma.ReceiptItemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ReceiptItem
+   */
+  omit?: Prisma.ReceiptItemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ReceiptItemInclude<ExtArgs> | null
+  where?: Prisma.ReceiptItemWhereInput
+  orderBy?: Prisma.ReceiptItemOrderByWithRelationInput | Prisma.ReceiptItemOrderByWithRelationInput[]
+  cursor?: Prisma.ReceiptItemWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ReceiptItemScalarFieldEnum | Prisma.ReceiptItemScalarFieldEnum[]
 }
 
 /**

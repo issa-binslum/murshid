@@ -152,6 +152,16 @@ model Session {
   @@index([expiresAt])
 }
 
+model TokenBlocklist {
+  jti       String   @id
+  userId    String
+  expiresAt DateTime
+
+  createdAt DateTime @default(now())
+
+  @@index([expiresAt])
+}
+
 model Account {
   id             String      @id @default(uuid())
   businessId     String
@@ -192,6 +202,7 @@ model Customer {
   business      Business       @relation(fields: [businessId], references: [id], onDelete: Cascade)
   salesOrders   SalesOrder[]
   salesInvoices SalesInvoice[]
+  receipts      Receipt[]
 
   @@index([businessId])
   @@index([deletedAt])
@@ -214,6 +225,7 @@ model Supplier {
   business         Business          @relation(fields: [businessId], references: [id], onDelete: Cascade)
   purchaseOrders   PurchaseOrder[]
   purchaseInvoices PurchaseInvoice[]
+  payments         Payment[]
 
   @@index([businessId])
   @@index([deletedAt])
@@ -241,6 +253,7 @@ model InventoryItem {
   salesInvoiceItems    SalesInvoiceItem[]
   purchaseOrderItems   PurchaseOrderItem[]
   purchaseInvoiceItems PurchaseInvoiceItem[]
+  receiptItems         ReceiptItem[]
 
   @@unique([businessId, itemCode])
   @@index([businessId])
@@ -421,6 +434,7 @@ model Receipt {
   businessId  String
   date        DateTime
   paidBy      String?
+  customerId  String?
   accountId   String
   amount      Decimal  @default(0)
   description String?
@@ -429,12 +443,29 @@ model Receipt {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
-  account  Account  @relation(fields: [accountId], references: [id], onDelete: Restrict)
+  business Business     @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  account  Account      @relation(fields: [accountId], references: [id], onDelete: Restrict)
+  customer Customer?    @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  items    ReceiptItem[]
 
   @@index([businessId])
   @@index([accountId])
+  @@index([customerId])
   @@index([deletedAt])
+}
+
+model ReceiptItem {
+  id        String  @id @default(uuid())
+  receiptId String
+  itemId    String
+  qty       Decimal
+  unitPrice Decimal
+  total     Decimal
+
+  receipt Receipt       @relation(fields: [receiptId], references: [id], onDelete: Cascade)
+  item    InventoryItem @relation(fields: [itemId], references: [id], onDelete: Restrict)
+
+  @@index([receiptId])
 }
 
 model Payment {
@@ -442,6 +473,7 @@ model Payment {
   businessId  String
   date        DateTime
   payee       String?
+  supplierId  String?
   accountId   String
   amount      Decimal  @default(0)
   description String?
@@ -450,11 +482,13 @@ model Payment {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
-  account  Account  @relation(fields: [accountId], references: [id], onDelete: Restrict)
+  business Business  @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  account  Account   @relation(fields: [accountId], references: [id], onDelete: Restrict)
+  supplier Supplier? @relation(fields: [supplierId], references: [id], onDelete: SetNull)
 
   @@index([businessId])
   @@index([accountId])
+  @@index([supplierId])
   @@index([deletedAt])
 }
 

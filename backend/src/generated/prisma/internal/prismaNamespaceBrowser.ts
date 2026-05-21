@@ -58,6 +58,7 @@ export const ModelName = {
   Permission: 'Permission',
   RolePermission: 'RolePermission',
   Session: 'Session',
+  TokenBlocklist: 'TokenBlocklist',
   Account: 'Account',
   Customer: 'Customer',
   Supplier: 'Supplier',
@@ -72,6 +73,7 @@ export const ModelName = {
   PurchaseInvoice: 'PurchaseInvoice',
   PurchaseInvoiceItem: 'PurchaseInvoiceItem',
   Receipt: 'Receipt',
+  ReceiptItem: 'ReceiptItem',
   Payment: 'Payment',
   AuditLog: 'AuditLog'
 } as const
@@ -177,6 +179,16 @@ export const SessionScalarFieldEnum = {
 } as const
 
 export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
+
+
+export const TokenBlocklistScalarFieldEnum = {
+  jti: 'jti',
+  userId: 'userId',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt'
+} as const
+
+export type TokenBlocklistScalarFieldEnum = (typeof TokenBlocklistScalarFieldEnum)[keyof typeof TokenBlocklistScalarFieldEnum]
 
 
 export const AccountScalarFieldEnum = {
@@ -386,6 +398,7 @@ export const ReceiptScalarFieldEnum = {
   businessId: 'businessId',
   date: 'date',
   paidBy: 'paidBy',
+  customerId: 'customerId',
   accountId: 'accountId',
   amount: 'amount',
   description: 'description',
@@ -397,11 +410,24 @@ export const ReceiptScalarFieldEnum = {
 export type ReceiptScalarFieldEnum = (typeof ReceiptScalarFieldEnum)[keyof typeof ReceiptScalarFieldEnum]
 
 
+export const ReceiptItemScalarFieldEnum = {
+  id: 'id',
+  receiptId: 'receiptId',
+  itemId: 'itemId',
+  qty: 'qty',
+  unitPrice: 'unitPrice',
+  total: 'total'
+} as const
+
+export type ReceiptItemScalarFieldEnum = (typeof ReceiptItemScalarFieldEnum)[keyof typeof ReceiptItemScalarFieldEnum]
+
+
 export const PaymentScalarFieldEnum = {
   id: 'id',
   businessId: 'businessId',
   date: 'date',
   payee: 'payee',
+  supplierId: 'supplierId',
   accountId: 'accountId',
   amount: 'amount',
   description: 'description',

@@ -18,14 +18,22 @@ async function main() {
     "roles:manage",
     "accounts:view",
     "accounts:manage",
+    "customers:view",
     "customers:manage",
+    "suppliers:view",
     "suppliers:manage",
+    "inventory:view",
     "inventory:manage",
+    "sales:view",
     "sales:manage",
+    "purchases:view",
     "purchases:manage",
+    "receipts:view",
     "receipts:manage",
+    "payments:view",
     "payments:manage",
     "reports:view",
+    "audit:view",
   ];
 
   await Promise.all(
@@ -59,13 +67,18 @@ async function main() {
   });
 
   const permissions = await prisma.permission.findMany({ where: { key: { in: permissionKeys } } });
+
+  // Assign all permissions to every Admin/Owner role across all businesses
+  const allPrivilegedRoles = await prisma.role.findMany({ where: { name: { in: ["Admin", "Owner"] } } });
   await Promise.all(
-    permissions.map((p) =>
-      prisma.rolePermission.upsert({
-        where: { roleId_permissionId: { roleId: adminRole.id, permissionId: p.id } },
-        update: {},
-        create: { roleId: adminRole.id, permissionId: p.id },
-      })
+    allPrivilegedRoles.flatMap((role) =>
+      permissions.map((p) =>
+        prisma.rolePermission.upsert({
+          where: { roleId_permissionId: { roleId: role.id, permissionId: p.id } },
+          update: {},
+          create: { roleId: role.id, permissionId: p.id },
+        })
+      )
     )
   );
 
@@ -100,4 +113,3 @@ main()
   .finally(async () => {
     await prisma.$disconnect();
   });
-
