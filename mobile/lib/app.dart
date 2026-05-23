@@ -1,14 +1,38 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'core/constants/app_colors.dart';
+import 'core/providers/auth_provider.dart';
+import 'core/services/api_client.dart';
 import 'router/app_router.dart';
 
-class App extends ConsumerWidget {
+class App extends ConsumerStatefulWidget {
   const App({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<App> createState() => _AppState();
+}
+
+class _AppState extends ConsumerState<App> {
+  late final StreamSubscription<void> _unauthorizedSub;
+
+  @override
+  void initState() {
+    super.initState();
+    _unauthorizedSub = ApiClient.onUnauthorized.listen((_) {
+      ref.read(authProvider.notifier).logout();
+    });
+  }
+
+  @override
+  void dispose() {
+    _unauthorizedSub.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final router = ref.watch(routerProvider);
 
     return MaterialApp.router(

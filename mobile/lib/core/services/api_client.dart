@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -7,8 +8,11 @@ class ApiClient {
   ApiClient._();
 
   static final Dio _dio = _createDio();
-
   static Dio get instance => _dio;
+
+  // Fires once whenever any API call gets a 401. App.dart listens and logs out.
+  static final _unauthorizedCtrl = StreamController<void>.broadcast();
+  static Stream<void> get onUnauthorized => _unauthorizedCtrl.stream;
 
   static Dio _createDio() {
     final dio = Dio(BaseOptions(
@@ -29,6 +33,9 @@ class ApiClient {
       },
       onError: (error, handler) {
         debugPrintDio(error);
+        if (error.response?.statusCode == 401) {
+          _unauthorizedCtrl.add(null);
+        }
         handler.next(error);
       },
     ));
